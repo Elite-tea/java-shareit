@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Component()
 @Slf4j
-public class InMemoryItemStorage implements ItemStorage{
+public class InMemoryItemStorage implements ItemStorage {
     /**
      * Поле хранилище пользователей
      */
@@ -97,7 +97,7 @@ public class InMemoryItemStorage implements ItemStorage{
                              wordName.get((int) i).equals(words.get(j)))) {
                         completedItems.add(items.get(i));
                     } else if (!completedItems.contains(items.get(i)) &&
-                            items.get(i).getAvailable() && wordsName.get(j-1).equals(text.toLowerCase())) {
+                            items.get(i).getAvailable() && wordsName.get(j - 1).equals(text.toLowerCase())) {
                         completedItems.add(items.get(i));
                     }
                 }

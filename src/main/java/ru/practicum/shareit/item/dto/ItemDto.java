@@ -14,7 +14,7 @@ public class ItemDto {
     protected Long id;
     protected String name;
     protected String description;
-    protected Boolean Available;
+    protected Boolean available;
     protected User owner;
     protected ItemRequest request;
 }

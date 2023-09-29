@@ -21,7 +21,7 @@ public interface ItemStorage {
      * @param item объект вещи
      * @return возвращает обновленную вещь
      */
-    Item update(ItemDto item, Long id, Long UserId);
+    Item update(ItemDto item, Long id, Long userId);
 
     Item getItemById(Long id);
 

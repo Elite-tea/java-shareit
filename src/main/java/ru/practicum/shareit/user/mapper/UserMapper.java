@@ -10,7 +10,8 @@ public class UserMapper {
                 user.getName() != null ? user.getName() : initUser.getName(),
                 user.getEmail() != null ? user.getEmail() : initUser.getEmail());
     }
-    public static User toDtoUser(UserDto userDto){
+
+    public static User toDtoUser(UserDto userDto) {
         return new User(
                 userDto.getId(),
                 userDto.getName(),
