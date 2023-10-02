@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.storage;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exeption.NotFoundException;
@@ -7,11 +8,11 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.validation.Validation;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Getter
 @Component()
 @Slf4j
 public class InMemoryItemStorage implements ItemStorage {
@@ -27,7 +28,6 @@ public class InMemoryItemStorage implements ItemStorage {
 
     @Override
     public Item create(ItemDto itemDto, User user) {
-        Validation.validationItem(itemDto, user);
         itemDto.setId(id);
         Item item = ItemMapper.toDtoItem(itemDto, user);
         log.debug("Предмет добавлен");
@@ -37,12 +37,10 @@ public class InMemoryItemStorage implements ItemStorage {
     }
 
     @Override
-    public Item update(ItemDto item, Long id, Long userId) {
-        Item initItem = items.get(id);
+    public Item update(ItemDto item, Long id, Long userId, Item initItem) {
         Item updateItem;
-        Validation.validationUpdateItem(userId, initItem);
         if (items.containsKey(id)) {
-            updateItem = ItemMapper.toDtoItemUpdate(item,initItem);
+            updateItem = ItemMapper.dtoItemUpdate(item,initItem);
             items.put(id,updateItem);
         } else {
             log.debug("Предмета не существует");

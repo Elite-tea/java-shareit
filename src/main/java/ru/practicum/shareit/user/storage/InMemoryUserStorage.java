@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.storage;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,8 +17,9 @@ import java.util.Collection;
 import java.util.HashMap;
 
 /**
- * Класс-хранилище реализующий интерфейс {@link } для хранения и обновления пользователей со свойствами <b>users<b/> и <b>id<b/>
+ * Класс-хранилище для хранения и обновления пользователей
  */
+@Getter
 @Component()
 @Slf4j
 public class InMemoryUserStorage implements UserStorage {
@@ -39,13 +41,18 @@ public class InMemoryUserStorage implements UserStorage {
      */
     public User create(@Valid @RequestBody User user) {
         user.setId(id);
-        Validation.validationUser(user, users);
         log.debug("Пользователь создан");
         users.put(id, user);
         id++;
         return user;
     }
 
+    /**
+     * Метод удаления пользователя.
+     *
+     * @param id идентификатор пользователя.
+     * @throws ValidationException генерирует 400 ошибку в случае если пользователь не существует
+     */
     @Override
     public void deleteUser(@Valid @RequestBody Long id) {
         if (users.containsKey(id)) {
@@ -69,7 +76,7 @@ public class InMemoryUserStorage implements UserStorage {
         if (users.containsKey(id)) {
             initUser = users.get(id);
             UserDto userDto = UserMapper.toUserDto(user, initUser);
-            updateUser = UserMapper.toDtoUser(userDto);
+            updateUser = UserMapper.dtoToUser(userDto);
             Validation.validationRegistrationUser(updateUser, users);
             log.debug("Пользователь обновлен");
             users.put(id, updateUser);

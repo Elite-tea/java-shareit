@@ -4,18 +4,13 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
+/**
+ * Класс-маппер для трансформации данных в сущность.
+ */
 public class ItemMapper {
-    public static ItemDto toItemDto(Item item) {
-        return new ItemDto(
-                item.getId(),
-                item.getName(),
-                item.getDescription(),
-                item.getAvailable(),
-                item.getOwner(),
-                item.getRequest() != null ? item.getRequest() : null
-        );
-    }
-
+    /**
+     * Метод преобразовывает данные в сущность <b>Item</b>
+     */
         public static Item toDtoItem(ItemDto itemDto, User user) {
             return new Item(
                     itemDto.getId(),
@@ -27,7 +22,10 @@ public class ItemMapper {
             );
         }
 
-    public static Item toDtoItemUpdate(ItemDto itemDto, Item item) {
+    /**
+     * Метод преобразовывает данные в сущность <b>Item</b> для обновления данных сущности.
+     */
+    public static Item dtoItemUpdate(ItemDto itemDto, Item item) {
         return new Item(
                 itemDto.getId() != null ? itemDto.getId() : item.getId(),
                 itemDto.getName() != null ? itemDto.getName() : item.getName(),

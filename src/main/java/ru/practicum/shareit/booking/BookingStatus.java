@@ -1,6 +1,9 @@
 package ru.practicum.shareit.booking;
 
-public enum Status {
+/**
+ * Статусы бронирования
+ */
+public enum BookingStatus {
     WAITING,
     APPROVED,
     REJECTED,

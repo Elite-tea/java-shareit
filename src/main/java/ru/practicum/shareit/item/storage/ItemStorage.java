@@ -5,8 +5,12 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 public interface ItemStorage {
+    HashMap<Long, Item> getItems();
+
+    Long getId();
     /**
      * Метод добавления вещи
      *
@@ -21,7 +25,7 @@ public interface ItemStorage {
      * @param item объект вещи
      * @return возвращает обновленную вещь
      */
-    Item update(ItemDto item, Long id, Long userId);
+    Item update(ItemDto item, Long id, Long userId, Item initItem);
 
     Item getItemById(Long id);
 

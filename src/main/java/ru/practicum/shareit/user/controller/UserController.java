@@ -9,7 +9,6 @@ import javax.validation.Valid;
 import java.util.Collection;
 
 /**
- * TODO Sprint add-controllers.
  * Класс-контроллер для создания и редактирования пользователей, а так же реализации API со свойством <b>userService</b>.
  */
 @RestController
@@ -29,7 +28,7 @@ public class UserController {
      */
     @PostMapping
     public User create(@Valid @RequestBody User user) {
-        return userService.getUserStorage().create(user);
+        return userService.create(user);
     }
 
     /**
@@ -39,7 +38,8 @@ public class UserController {
      * @return возвращает измененного пользователя.
      */
     @PatchMapping("{id}")
-    public User update(@Valid @RequestBody User user, @PathVariable Long id) {
+    public User update(@Valid @RequestBody User user,
+                       @PathVariable Long id) {
         return userService.getUserStorage().update(user, id);
     }
 
@@ -50,7 +50,7 @@ public class UserController {
      */
     @DeleteMapping("{id}")
     public void deleteUser(@PathVariable Long id) {
-        userService.getUserStorage().deleteUser(id);
+        userService.deleteUser(id);
     }
 
     /**

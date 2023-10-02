@@ -3,7 +3,13 @@ package ru.practicum.shareit.user.mapper;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
+/**
+ * Класс-маппер для трансформации данных в сущность.
+ */
 public class UserMapper {
+    /**
+     * Метод преобразовывает данные в сущность <b>UserDto</b> для последующей трансформации
+     */
     public static UserDto toUserDto(User user, User initUser) {
         return new UserDto(
                 user.getId() != null ? user.getId() : initUser.getId(),
@@ -11,7 +17,10 @@ public class UserMapper {
                 user.getEmail() != null ? user.getEmail() : initUser.getEmail());
     }
 
-    public static User toDtoUser(UserDto userDto) {
+    /**
+     * Метод преобразовывает данные в сущность <b>User</b>
+     */
+    public static User dtoToUser(UserDto userDto) {
         return new User(
                 userDto.getId(),
                 userDto.getName(),

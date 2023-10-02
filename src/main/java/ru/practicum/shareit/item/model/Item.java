@@ -7,7 +7,7 @@ import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 /**
- * TODO Sprint add-controllers.
+ * Класс модель, описывающий структуру сущности <b>Item</b>
  */
 @Data
 @AllArgsConstructor

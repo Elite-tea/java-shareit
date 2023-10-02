@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.storage;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Интерфейс для работы с хранилищем пользователей, реализован в {@link  } и {@link  }
@@ -45,4 +46,6 @@ public interface UserStorage {
      * @return возвращает пользователя по id
      */
     User getUserById(Long id);
+
+    Map<Long, User> getUsers();
 }

@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import java.util.Collection;
 
 /**
- * TODO Sprint add-controllers.
+ * Класс-контроллер для создания и редактирования вещей.
  */
 @RestController
 @RequestMapping("/items")
@@ -28,8 +28,10 @@ public class ItemController {
      * @return возвращает добавленную вещь.
      */
     @PostMapping
-    public Item addItem(@Valid @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long id) {
-        return itemService.getItemStorage().create(itemDto, itemService.getUserStorage().getUserById(id));
+    public Item addItem(@Valid @RequestBody ItemDto itemDto,
+                        @RequestHeader("X-Sharer-User-Id") Long id) {
+        return itemService
+               .create(itemDto, itemService.getUserStorage().getUserById(id));
     }
 
     /**
@@ -39,9 +41,11 @@ public class ItemController {
      * @return возвращает измененную вещь.
      */
     @PatchMapping("{id}")
-    public Item update(@Valid @RequestBody ItemDto item, @PathVariable Long id, @RequestHeader("X-Sharer-User-Id") Long userId) {
+    public Item update(@Valid @RequestBody ItemDto item,
+                       @PathVariable Long id,
+                       @RequestHeader("X-Sharer-User-Id") Long userId) {
 
-        return itemService.getItemStorage().update(item, id, userId);
+        return itemService.update(item, id, userId);
     }
 
     /**
@@ -55,8 +59,9 @@ public class ItemController {
     }
 
     /**
-     * Запрашивает вещь пользователя.
+     * Запрашивает вещь пользователя по идентификатору
      *
+     * @param id идентификатор пользователя.
      * @return возвращает вещь пользователя.
      */
     @GetMapping("{id}")
@@ -67,6 +72,7 @@ public class ItemController {
     /**
      * Запрашивает поиск вещи.
      *
+     * @param text текст для поиска вещей.
      * @return возвращает коллекцию найденных вещей.
      */
     @GetMapping("/search")

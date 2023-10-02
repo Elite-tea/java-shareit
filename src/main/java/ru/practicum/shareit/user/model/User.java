@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.Email;
 
 /**
- * TODO Sprint add-controllers.
+ * Класс модель, описывающий структуру сущности <b>User</b>
  */
 @Data
 @AllArgsConstructor
