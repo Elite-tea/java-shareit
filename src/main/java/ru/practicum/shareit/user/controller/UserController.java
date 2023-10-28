@@ -2,22 +2,20 @@ package ru.practicum.shareit.user.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.entity.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
 import java.util.Collection;
 
 /**
- * Класс-контроллер для создания и редактирования пользователей, а так же реализации API со свойством <b>userService</b>.
+ * Класс-контроллер для создания и редактирования пользователей, а так же реализации API.
  */
 @RestController
 @RequestMapping("/users")
 @AllArgsConstructor
 public class UserController {
-    /**
-     * Поле сервис
-     */
     private final UserService userService;
 
     /**
@@ -27,7 +25,7 @@ public class UserController {
      * @return возвращает добавленного пользователя.
      */
     @PostMapping
-    public User create(@Valid @RequestBody User user) {
+    public User create(@Valid @RequestBody UserDto user) {
         return userService.create(user);
     }
 
@@ -40,7 +38,7 @@ public class UserController {
     @PatchMapping("{id}")
     public User update(@Valid @RequestBody User user,
                        @PathVariable Long id) {
-        return userService.getUserStorage().update(user, id);
+        return userService.update(user, id);
     }
 
     /**
@@ -50,7 +48,7 @@ public class UserController {
      */
     @DeleteMapping("{id}")
     public void deleteUser(@PathVariable Long id) {
-        userService.getUserStorage().deleteUser(id);
+        userService.deleteUser(id);
     }
 
     /**
@@ -60,7 +58,7 @@ public class UserController {
      */
     @GetMapping
     public Collection<User> getUser() {
-        return userService.getUserStorage().getUser();
+        return userService.getUserRepository().findAll();
     }
 
     /**
@@ -71,6 +69,6 @@ public class UserController {
      */
     @GetMapping("{id}")
     public User getUser(@PathVariable Long id) {
-        return userService.getUserStorage().getUserById(id);
+        return userService.getUser(id);
     }
 }
