@@ -2,11 +2,8 @@ package ru.practicum.shareit.item.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.CommentDto;
-import ru.practicum.shareit.item.dto.ItemDataDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.entity.Comment;
-import ru.practicum.shareit.item.entity.Item;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
@@ -19,27 +16,28 @@ import java.util.Collection;
 @RequestMapping("/items")
 @AllArgsConstructor
 public class ItemController {
+    /**
+     * Поле сервис
+     */
     private final ItemService itemService;
 
     /**
-     * Добавляет вещь в бд.
+     * Добавляет вещь в хранилище.
      *
-     * @param itemDto объект вещи.
-     * @param id идентификатор пользователя.
+     * @param itemDto объект пользователя.
      * @return возвращает добавленную вещь.
      */
     @PostMapping
-    public Item create(@Valid @RequestBody ItemDto itemDto,
+    public Item addItem(@Valid @RequestBody ItemDto itemDto,
                         @RequestHeader("X-Sharer-User-Id") Long id) {
-        return itemService.create(itemDto, id);
+        return itemService
+               .create(itemDto, itemService.getUserStorage().getUserById(id));
     }
 
     /**
-     * Обновляет вещь в бд.
+     * Обновляет вещь в хранилище.
      *
      * @param item объект вещи.
-     * @param id идентификатор вещи.
-     * @param userId идентификатор пользователя.
      * @return возвращает измененную вещь.
      */
     @PatchMapping("{id}")
@@ -51,40 +49,24 @@ public class ItemController {
     }
 
     /**
-     * Добавляет комментарий к вещи, пользователем, который брал ее в аренду.
-     *
-     * @param commentDto сущность комментария.
-     * @param id идентификатор пользователя комментария.
-     * @param itemId идентификатор вещи.
-     * @return возвращает добавленный комментарий.
-     */
-    @PostMapping("/{itemId}/comment")
-    public Comment addComment(@Valid @RequestBody CommentDto commentDto,
-                              @RequestHeader("X-Sharer-User-Id") Long id,
-                              @PathVariable Long itemId) {
-        return itemService.addComment(commentDto, id, itemId);
-    }
-
-    /**
      * Запрашивает вещи пользователя.
      *
-     * @return возвращает коллекцию вещей пользователя.
+     * @return возвращает вещи пользователя.
      */
     @GetMapping
-    public Collection<ItemDataDto> getItemByUser(@Valid @RequestHeader("X-Sharer-User-Id") Long id) {
-        return itemService.getItemByUser(id);
+    public Collection<Item> getItemByUser(@Valid @RequestHeader("X-Sharer-User-Id") Long id) {
+        return itemService.getItemStorage().getItemByUser(id);
     }
 
     /**
      * Запрашивает вещь пользователя по идентификатору
      *
-     * @param id идентификатор вещи.
-     * @param userId идентификатор пользователя.
+     * @param id идентификатор пользователя.
      * @return возвращает вещь пользователя.
      */
     @GetMapping("{id}")
-    public ItemDataDto getItemById(@Valid @PathVariable Long id, @RequestHeader("X-Sharer-User-Id") Long userId) {
-        return itemService.getItemById(id, userId);
+    public Item getItemById(@Valid @PathVariable Long id) {
+        return itemService.getItemStorage().getItemById(id);
     }
 
     /**
@@ -95,6 +77,6 @@ public class ItemController {
      */
     @GetMapping("/search")
     public Collection<Item> getItemBySearch(@RequestParam String text) {
-        return itemService.getItemBySearch(text);
+        return itemService.getItemStorage().getItemBySearch(text);
     }
 }
