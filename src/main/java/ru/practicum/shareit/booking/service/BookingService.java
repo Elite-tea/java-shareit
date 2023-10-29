@@ -134,7 +134,7 @@ public class BookingService {
                         .filter(p -> p.getStatus() == BookingStatus.REJECTED)
                         .collect(Collectors.toList());
             default:
-                throw new ValidationException(String.format("'Unknown state: %s", state));
+                throw new ValidationException(String.format("Unknown state: %s", state));
         }
     }
 }

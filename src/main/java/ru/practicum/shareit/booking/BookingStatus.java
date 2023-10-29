@@ -10,5 +10,6 @@ public enum BookingStatus {
     ALL,
     PAST,
     FUTURE,
-    CURRENT
+    CURRENT,
+    UNSUPPORTED_STATUS
 }
