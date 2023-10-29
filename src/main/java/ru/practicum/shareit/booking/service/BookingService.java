@@ -58,7 +58,7 @@ public class BookingService {
         }
     }
 
-    public Collection<Booking> getAllBookingByUser(Long id, String state) {
+    public Collection<Booking> getAllBookingByUser(Long id, BookingStatus state) {
         LocalDateTime time = LocalDateTime.now();
         Collection<Booking> collectionBooking = bookingRepository.findByBookerIdOrderByStartDesc(id);
                 if (collectionBooking.isEmpty()) {
@@ -68,7 +68,7 @@ public class BookingService {
                 }
             }
 
-            public Collection<Booking> getAllBookingItemByUser(Long id, String state) {
+            public Collection<Booking> getAllBookingItemByUser(Long id, BookingStatus state) {
         LocalDateTime time = LocalDateTime.now();
         Collection<Booking> collectionBooking = bookingRepository.findByItem_User_IdOrderByStartDesc(id);
                 if (collectionBooking.isEmpty()) {
@@ -95,41 +95,41 @@ public class BookingService {
     public Booking update(Long bookingId, Long userId, Boolean approved) {
         Booking bookingUpdate = bookingRepository.findById(bookingId).get();
         Long userBookingOwner = bookingUpdate.getItem().getUser().getId();
-        if (userBookingOwner.equals(userId) && bookingUpdate.getStatus().equals(BookingStatus.WAITING)) {
+        if (userBookingOwner.equals(userId) && bookingUpdate.getStatus() == BookingStatus.WAITING) {
             if (approved) {
                 bookingUpdate.setStatus(BookingStatus.APPROVED);
             } else {
                 bookingUpdate.setStatus(BookingStatus.REJECTED);
             }
             return bookingRepository.save(bookingUpdate);
-        } else if (!bookingUpdate.getStatus().equals(BookingStatus.WAITING)) {
+        } else if (bookingUpdate.getStatus() != (BookingStatus.WAITING)) {
             throw new ValidationException(String.format("Обновление запроса %d невозможно, запрос обработан", bookingId));
         } else {
             throw new NotFoundException(String.format("Обновление запроса %d невозможно, нет доступа.", bookingId));
         }
     }
 
-    private Collection<Booking> getAllBookingByBookerId(String state, Collection<Booking> booking, LocalDateTime time) {
+    private Collection<Booking> getAllBookingByBookerId(BookingStatus state, Collection<Booking> booking, LocalDateTime time) {
         switch (state) {
-            case "ALL" :
+            case ALL :
                 return booking;
-            case "CURRENT" :
+            case CURRENT :
                 return booking.stream()
                         .filter(p -> time.isAfter(p.getStart()) && time.isBefore(p.getEnd()))
                         .collect(Collectors.toList());
-            case "PAST" :
+            case PAST :
                 return booking.stream()
                         .filter(p -> time.isAfter(p.getEnd()))
                         .collect(Collectors.toList());
-            case "FUTURE" :
+            case FUTURE :
                 return booking.stream()
                         .filter(p -> time.isBefore(p.getStart()))
                         .collect(Collectors.toList());
-            case "WAITING" :
+            case WAITING :
                 return booking.stream()
                         .filter(p -> p.getStatus() == BookingStatus.WAITING)
                         .collect(Collectors.toList());
-            case "REJECTED" :
+            case REJECTED :
                 return booking.stream()
                         .filter(p -> p.getStatus() == BookingStatus.REJECTED)
                         .collect(Collectors.toList());

@@ -31,7 +31,8 @@ public class BookingMapper {
     /**
      * Метод преобразовывает данные в сущность <b>BookingDataDto</b> для обновления данных сущности.
      * @param booking последняя аренда для вещи
-     * @return возвращает аренду для вещи с последующей выдачей по идентификатору вещи в {@link ru.practicum.shareit.item.service.ItemService}.
+     * @return возвращает аренду для вещи с последующей выдачей по идентификатору вещи в
+     * {@link ru.practicum.shareit.item.service.ItemService}.
      */
     public static BookingDataDto bookingDtoNoItem(Booking booking) {
         return new BookingDataDto(

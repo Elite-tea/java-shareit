@@ -17,7 +17,8 @@ public class AwesomeExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ValidationException.class)
     protected ResponseEntity<AwesomeException> handleThereIsNoSuchUserException() {
-        return new ResponseEntity<>(new AwesomeException("Unknown state: UNSUPPORTED_STATUS"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new AwesomeException("Unknown state: UNSUPPORTED_STATUS"),
+                HttpStatus.BAD_REQUEST);
     }
 
     @Data

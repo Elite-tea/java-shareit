@@ -13,7 +13,8 @@ public class AlreadyExistsException extends RuntimeException {
 
     @ExceptionHandler(AlreadyExistsException.class)
     protected ResponseEntity<AlreadyExistsException> handleThereIsNoSuchUserException() {
-        return new ResponseEntity<>(new AlreadyExistsException("Unknown state: UNSUPPORTED_STATUS"), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new AlreadyExistsException("Unknown state: UNSUPPORTED_STATUS"),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     public AlreadyExistsException(final String message) {

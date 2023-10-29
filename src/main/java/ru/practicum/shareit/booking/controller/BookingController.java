@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.entity.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
@@ -51,7 +52,7 @@ public class BookingController {
      * @return возвращает аренды пользователя.
      */
     @GetMapping
-    public Collection<Booking> getAllBookingByUser(@Valid @RequestParam(defaultValue = "ALL") String state,
+    public Collection<Booking> getAllBookingByUser(@Valid @RequestParam(defaultValue = "ALL") BookingStatus state,
                                                    @RequestHeader("X-Sharer-User-Id") Long id) {
         return bookingService.getAllBookingByUser(id, state);
     }
@@ -78,7 +79,7 @@ public class BookingController {
      * @return возвращает аренды пользователя.
      */
     @GetMapping("/owner") //Если есть вещь, нужно найти брони и выдать
-    public Collection<Booking> getAllBookingItemByUser(@Valid @RequestParam(defaultValue = "ALL") String state,
+    public Collection<Booking> getAllBookingItemByUser(@Valid @RequestParam(defaultValue = "ALL") BookingStatus state,
                                                    @RequestHeader("X-Sharer-User-Id") Long id) {
         return bookingService.getAllBookingItemByUser(id, state);
     }

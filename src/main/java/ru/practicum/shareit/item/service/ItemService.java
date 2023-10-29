@@ -81,11 +81,15 @@ public class ItemService {
 
             LocalDateTime time = LocalDateTime.now();
             List<Booking> booking = bookingRepository.findByItem_User_IdOrderByEndDesc(id).stream()
-                    .filter(p -> p.getEnd().isBefore(time) && p.getStart().isBefore(time) && p.getItem().getUser().getId().equals(id))
+                    .filter(p -> p.getEnd().isBefore(time)
+                            && p.getStart().isBefore(time)
+                            && p.getItem().getUser().getId().equals(id))
                     .collect(Collectors.toList());
 
             List<Booking> bookingNext = bookingRepository.findByItem_User_IdOrderByEndDesc(id).stream()
-                    .filter(p -> p.getEnd().isAfter(time) && p.getStart().isAfter(time) && p.getItem().getUser().getId().equals(id))
+                    .filter(p -> p.getEnd().isAfter(time)
+                            && p.getStart().isAfter(time)
+                            && p.getItem().getUser().getId().equals(id))
                     .collect(Collectors.toList());
 
             List<ItemDataDto> result = new ArrayList<>();
@@ -124,7 +128,9 @@ public class ItemService {
                     .collect(Collectors.toList());
 
             List<Booking> bookingNext = bookingRepository.findByItem_IdOrderByEndDesc(id).stream()
-                    .filter(p -> p.getEnd().isAfter(time) && p.getStart().isAfter(time) && p.getItem().getUser().getId().equals(userId))
+                    .filter(p -> p.getEnd().isAfter(time)
+                            && p.getStart().isAfter(time)
+                            && p.getItem().getUser().getId().equals(userId))
                     .collect(Collectors.toList());
 
             return ItemMapper.itemToDataDto(booking, bookingNext, comment);

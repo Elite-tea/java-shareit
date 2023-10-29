@@ -27,7 +27,8 @@ public class Validation {
     public static void validationRegistrationUser(User user, UserRepository userRepository) {
         User validUser = userRepository.findByEmailContainingIgnoreCase(user.getEmail());
         try {
-            if (Objects.equals(validUser.getEmail(), user.getEmail()) && !Objects.equals(validUser.getId(), user.getId())) {
+            if (Objects.equals(validUser.getEmail(), user.getEmail())
+                    && !Objects.equals(validUser.getId(), user.getId())) {
                 throw new RuntimeException(String.format("Пользователь с email %s уже зарегистрирован", user.getEmail()));
             }
         } catch (NullPointerException ignore) { }
