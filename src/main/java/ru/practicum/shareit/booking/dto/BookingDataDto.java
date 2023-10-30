@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * Класс-дто для проектирования данных в сущность <b>BookingDto</b>.
+ * Класс-дто для проектирования данных в сущность <b>BookingDataDto</b>.
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookingDto {
+public class BookingDataDto {
     protected Long id;
     protected LocalDateTime start;
     protected LocalDateTime end;
-    protected Long itemId;
+    protected Long bookerId;
 }
