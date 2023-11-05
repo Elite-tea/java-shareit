@@ -23,8 +23,8 @@ public class ItemMapper {
                     itemDto.getName(),
                     itemDto.getDescription(),
                     itemDto.getAvailable(),
-                    user,
-                    null
+                    itemDto.getRequestId(),
+                    user
             );
         }
 
@@ -41,8 +41,8 @@ public class ItemMapper {
                 itemDto.getName() != null ? itemDto.getName() : item.getName(),
                 itemDto.getDescription() != null ? itemDto.getDescription() : item.getDescription(),
                 itemDto.getAvailable() != null ? itemDto.getAvailable() : item.getAvailable(),
-                user,
-                item.getRequest()
+                item.getRequestId(),
+                user
         );
     }
 
@@ -63,7 +63,7 @@ public class ItemMapper {
                 bookingNext.size() > 1 ? BookingMapper.bookingDtoNoItem(bookingNext.get(bookingNext.size() - 1)) : null,
                 comment,
                 booking.get(0).getItem().getUser(),
-                booking.get(0).getItem().getRequest()
+                booking.get(0).getItem().getRequestId()
         );
     }
 
@@ -83,7 +83,7 @@ public class ItemMapper {
                 null,
                 comment,
                 item.getUser(),
-                item.getRequest()
+                item.getRequestId()
         );
     }
     }

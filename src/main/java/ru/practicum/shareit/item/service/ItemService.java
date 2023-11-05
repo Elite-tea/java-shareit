@@ -3,6 +3,9 @@ package ru.practicum.shareit.item.service;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.entity.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
@@ -69,13 +72,16 @@ public class ItemService {
         return itemRepository.save(itemUpdate);
     }
 
-    public Collection<ItemDataDto> getItemByUser(Long id) {
+    public Collection<ItemDataDto> getItemByUser(Long id, Integer from, Integer size) {
+        Pageable pageable = PageRequest.of(from / size, size,
+                Sort.by(Sort.Direction.DESC, "created"));
+        if (from >= 0 && size > 0) {
         try {
-            List<Comment> comment = commentRepository.findByItem_Id(id);
+            List<Comment> comment = commentRepository.findByItem_Id(id, pageable);
             List<Item> item = itemRepository.findByUserId(id);
             List<ItemDataDto> itemData = new ArrayList<>();
             while (!item.isEmpty()) {
-                itemData.add(ItemMapper.itemToDataDtoNoBooking(item.get(0),commentRepository.findByItem_Id(id)));
+                itemData.add(ItemMapper.itemToDataDtoNoBooking(item.get(0),commentRepository.findByItem_Id(id, pageable)));
                 item.remove(0);
             }
 
@@ -117,11 +123,17 @@ public class ItemService {
             log.debug("Предмет не существует");
             throw new NotFoundException(String.format("Предмет с id %d не существует", id));
         }
+        } else {
+            throw new ValidationException(String.format("Не верно указано количество предметов %d или страниц %d", from, size));
+        }
     }
 
-    public ItemDataDto getItemById(Long id, Long userId) {
+    public ItemDataDto getItemById(Long id, Long userId, Integer from, Integer size) {
+        Pageable pageable = PageRequest.of(from / size, size,
+                Sort.by(Sort.Direction.DESC, "created"));
+        if (from >= 0 && size > 0) {
         try {
-            List<Comment> comment = commentRepository.findByItem_Id(id);
+            List<Comment> comment = commentRepository.findByItem_Id(id, pageable);
             LocalDateTime time = LocalDateTime.now();
             List<Booking> booking = bookingRepository.findByItem_IdOrderByEndDesc(id).stream()
                     .filter(p -> p.getStart().isBefore(time) && p.getItem().getUser().getId().equals(userId))
@@ -138,11 +150,14 @@ public class ItemService {
             try {
                 Item item = itemRepository.findById(id).get();
                 log.debug("Запрошен предмет c id: {}", id);
-                return ItemMapper.itemToDataDtoNoBooking(item,commentRepository.findByItem_Id(id));
+                return ItemMapper.itemToDataDtoNoBooking(item,commentRepository.findByItem_Id(id, pageable));
             } catch (RuntimeException g) {
                 log.debug("Предмет не существует");
                 throw new NotFoundException(String.format("Предмет с id %d не существует", id));
             }
+        }
+        } else {
+            throw new ValidationException(String.format("Не верно указано количество предметов %d или страниц %d", from, size));
         }
     }
 

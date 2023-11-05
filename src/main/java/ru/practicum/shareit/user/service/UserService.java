@@ -82,7 +82,7 @@ public class UserService {
     public User getUser(@PathVariable Long id) {
         try {
             return userRepository.findById(id).get();
-        } catch (NoSuchElementException s) {
+        } catch (RuntimeException s) {
             throw new NotFoundException(String.format("Пустой email у пользователя %s", id));
         }
     }

@@ -1,3 +1,8 @@
+DROP TABLE users;
+DROP TABLE items;
+DROP TABLE booking;
+DROP TABLE comment;
+DROP TABLE request;
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     email varchar(320) NOT NULL UNIQUE,
@@ -25,4 +30,10 @@ CREATE TABLE IF NOT EXISTS comment (
     text varchar(100),
     item_id BIGINT,
     author_name varchar(100),
+    created TIMESTAMP WITHOUT TIME ZONE);
+
+CREATE TABLE IF NOT EXISTS request (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    description varchar(100),
+    requestor_id BIGINT,
     created TIMESTAMP WITHOUT TIME ZONE);

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.request.entity.ItemRequest;
+import ru.practicum.shareit.request.entity.Request;
 import ru.practicum.shareit.user.entity.User;
 
 import javax.persistence.*;
@@ -33,12 +33,11 @@ public class Item {
     @NotNull
     private Boolean available;
 
+    @Column(name = "request_id", nullable = false)
+    private Long requestId;
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonManagedReference
     private User user;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private ItemRequest request;
 
 }

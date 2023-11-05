@@ -10,6 +10,8 @@ import ru.practicum.shareit.item.entity.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Collection;
 
 /**
@@ -71,8 +73,10 @@ public class ItemController {
      * @return возвращает коллекцию вещей пользователя.
      */
     @GetMapping
-    public Collection<ItemDataDto> getItemByUser(@Valid @RequestHeader("X-Sharer-User-Id") Long id) {
-        return itemService.getItemByUser(id);
+    public Collection<ItemDataDto> getItemByUser(@Valid @RequestHeader("X-Sharer-User-Id") Long id,
+                                                 @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                                 @Positive @RequestParam(defaultValue = "10") Integer size) {
+        return itemService.getItemByUser(id, from, size);
     }
 
     /**
@@ -83,8 +87,10 @@ public class ItemController {
      * @return возвращает вещь пользователя.
      */
     @GetMapping("{id}")
-    public ItemDataDto getItemById(@Valid @PathVariable Long id, @RequestHeader("X-Sharer-User-Id") Long userId) {
-        return itemService.getItemById(id, userId);
+    public ItemDataDto getItemById(@Valid @PathVariable Long id, @RequestHeader("X-Sharer-User-Id") Long userId,
+                                   @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                   @Positive @RequestParam(defaultValue = "10") Integer size) {
+        return itemService.getItemById(id, userId, from, size);
     }
 
     /**
