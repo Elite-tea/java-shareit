@@ -1,10 +1,7 @@
 package ru.practicum.shareit.request.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.request.dto.ItemGetRequestDTO;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.entity.Request;
@@ -13,7 +10,6 @@ import ru.practicum.shareit.request.service.RequestService;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 /**

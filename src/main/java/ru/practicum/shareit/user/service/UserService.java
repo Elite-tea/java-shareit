@@ -15,7 +15,6 @@ import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.validation.Validation;
 
 import javax.validation.ConstraintViolationException;
-import java.util.NoSuchElementException;
 
 /**
  * Класс-сервис для создания и редактирования пользователей, а так же реализации API.
