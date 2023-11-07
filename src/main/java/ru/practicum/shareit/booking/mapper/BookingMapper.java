@@ -12,10 +12,11 @@ import java.time.LocalDateTime;
 public class BookingMapper {
     /**
      * Метод преобразовывает данные в сущность <b>BookingDataDto</b> для обновления данных сущности.
+     *
      * @param bookingDto аренда для вещи
-     * @param user пользователь, инициализирующий аренду
-     * @param item вещь, берущую в аренду
-     * @param time время создания аренды
+     * @param user       пользователь, инициализирующий аренду
+     * @param item       вещь, берущую в аренду
+     * @param time       время создания аренды
      * @return возвращает аренду для вещи
      */
     public static Booking toDtoNewBooking(BookingDto bookingDto, User user, Item item, LocalDateTime time) {
@@ -30,6 +31,7 @@ public class BookingMapper {
 
     /**
      * Метод преобразовывает данные в сущность <b>BookingDataDto</b> для обновления данных сущности.
+     *
      * @param booking последняя аренда для вещи
      * @return возвращает аренду для вещи с последующей выдачей по идентификатору вещи в
      * {@link ru.practicum.shareit.item.service.ItemService}.

@@ -13,26 +13,28 @@ import java.util.List;
 public class ItemMapper {
     /**
      * Метод преобразовывает данные в сущность <b>Item</b>
+     *
      * @param itemDto полученная сущность
-     * @param user пользователь, добавивший предмет
+     * @param user    пользователь, добавивший предмет
      * @return возвращает вещь для добавления в бд
      */
-        public static Item toDtoItem(ItemDto itemDto, User user) {
-            return new Item(
-                    itemDto.getId(),
-                    itemDto.getName(),
-                    itemDto.getDescription(),
-                    itemDto.getAvailable(),
-                    itemDto.getRequestId(),
-                    user
-            );
-        }
+    public static Item toDtoItem(ItemDto itemDto, User user) {
+        return new Item(
+                itemDto.getId(),
+                itemDto.getName(),
+                itemDto.getDescription(),
+                itemDto.getAvailable(),
+                itemDto.getRequestId(),
+                user
+        );
+    }
 
     /**
      * Метод преобразовывает данные в сущность <b>Item</b> для обновления данных сущности.
+     *
      * @param itemDto сущность с новыми данными для обновления
-     * @param item редактируемый предмет
-     * @param user пользователь - инициатор обновления
+     * @param item    редактируемый предмет
+     * @param user    пользователь - инициатор обновления
      * @return возвращает вещь для обновления в бд
      */
     public static Item dtoItemUpdate(ItemDto itemDto, Item item, User user) {
@@ -48,9 +50,10 @@ public class ItemMapper {
 
     /**
      * Метод преобразовывает данные в сущность <b>ItemDataDto</b>
-     * @param booking список с последними арендами
+     *
+     * @param booking     список с последними арендами
      * @param bookingNext список с будущими арендами
-     * @param comment комментарии к вещи
+     * @param comment     комментарии к вещи
      * @return возвращает вещь для выдачи по идентификатору.
      */
     public static ItemDataDto itemToDataDto(List<Booking> booking, List<Booking> bookingNext, List<Comment> comment) {
@@ -69,11 +72,12 @@ public class ItemMapper {
 
     /**
      * Метод преобразовывает данные в сущность <b>ItemDataDto</b> для выдачи пи условии отсутствия аренд.
-     * @param item полученная вещь
+     *
+     * @param item    полученная вещь
      * @param comment комментарии к вещи
      * @return возвращает вещь для выдачи по идентификатору.
      */
-    public static ItemDataDto itemToDataDtoNoBooking(Item item,  List<Comment> comment) {
+    public static ItemDataDto itemToDataDtoNoBooking(Item item, List<Comment> comment) {
         return new ItemDataDto(
                 item.getId(),
                 item.getName(),
@@ -86,4 +90,4 @@ public class ItemMapper {
                 item.getRequestId()
         );
     }
-    }
+}

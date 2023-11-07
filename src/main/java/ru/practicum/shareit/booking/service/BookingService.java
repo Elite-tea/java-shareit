@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 public class BookingService {
     /**
      * Описание данных методов можно найти в {@link ru.practicum.shareit.booking.controller.BookingController }
-     *
      */
     private final BookingRepository bookingRepository;
     private final ItemRepository itemRepository;
@@ -64,32 +63,32 @@ public class BookingService {
     public Collection<Booking> getAllBookingByUser(Long id, BookingStatus state, Integer from, Integer size) {
         Pageable pageable = PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start"));
         if (from >= 0 && size > 0) {
-        LocalDateTime time = LocalDateTime.now();
-        Collection<Booking> collectionBooking = bookingRepository.findByBookerIdOrderByStartDesc(id, pageable);
-                if (collectionBooking.isEmpty()) {
-                    throw new AlreadyExistsException("Ошибка доступа к получению данных, пользователь не существует");
-                } else {
-                    return getAllBookingByBookerId(state, collectionBooking, time);
-                }
+            LocalDateTime time = LocalDateTime.now();
+            Collection<Booking> collectionBooking = bookingRepository.findByBookerIdOrderByStartDesc(id, pageable);
+            if (collectionBooking.isEmpty()) {
+                throw new AlreadyExistsException("Ошибка доступа к получению данных, пользователь не существует");
+            } else {
+                return getAllBookingByBookerId(state, collectionBooking, time);
+            }
         } else {
             throw new ValidationException(String.format("Не верно указано количество предметов %d или страниц %d", from, size));
         }
-            }
+    }
 
     public Collection<Booking> getAllBookingItemByUser(Long id, BookingStatus state, Integer from, Integer size) {
         Pageable pageable = PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start"));
-            if (from >= 0 && size > 0) {
-        LocalDateTime time = LocalDateTime.now();
-        Collection<Booking> collectionBooking = bookingRepository.findByItem_User_IdOrderByStartDesc(id, pageable);
-                if (collectionBooking.isEmpty()) {
-                    throw new AlreadyExistsException("Ошибка доступа к получению данных, пользователь не существует");
-                } else {
-                    return getAllBookingByBookerId(state, collectionBooking, time);
-                }
+        if (from >= 0 && size > 0) {
+            LocalDateTime time = LocalDateTime.now();
+            Collection<Booking> collectionBooking = bookingRepository.findByItem_User_IdOrderByStartDesc(id, pageable);
+            if (collectionBooking.isEmpty()) {
+                throw new AlreadyExistsException("Ошибка доступа к получению данных, пользователь не существует");
             } else {
-                throw new ValidationException(String.format("Не верно указано количество предметов %d или страниц %d", from, size));
+                return getAllBookingByBookerId(state, collectionBooking, time);
             }
-            }
+        } else {
+            throw new ValidationException(String.format("Не верно указано количество предметов %d или страниц %d", from, size));
+        }
+    }
 
 
     public Booking getBookingByUser(Long bookingId, Long userId) {
@@ -124,25 +123,25 @@ public class BookingService {
 
     private Collection<Booking> getAllBookingByBookerId(BookingStatus state, Collection<Booking> booking, LocalDateTime time) {
         switch (state) {
-            case ALL :
+            case ALL:
                 return booking;
-            case CURRENT :
+            case CURRENT:
                 return booking.stream()
                         .filter(p -> time.isAfter(p.getStart()) && time.isBefore(p.getEnd()))
                         .collect(Collectors.toList());
-            case PAST :
+            case PAST:
                 return booking.stream()
                         .filter(p -> time.isAfter(p.getEnd()))
                         .collect(Collectors.toList());
-            case FUTURE :
+            case FUTURE:
                 return booking.stream()
                         .filter(p -> time.isBefore(p.getStart()))
                         .collect(Collectors.toList());
-            case WAITING :
+            case WAITING:
                 return booking.stream()
                         .filter(p -> p.getStatus() == BookingStatus.WAITING)
                         .collect(Collectors.toList());
-            case REJECTED :
+            case REJECTED:
                 return booking.stream()
                         .filter(p -> p.getStatus() == BookingStatus.REJECTED)
                         .collect(Collectors.toList());

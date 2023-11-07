@@ -44,7 +44,7 @@ public class UserController {
     /**
      * Удаляет пользователя.
      *
-     * @param id       id пользователя.
+     * @param id id пользователя.
      */
     @DeleteMapping("{id}")
     public void deleteUser(@PathVariable Long id) {

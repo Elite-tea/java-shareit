@@ -36,7 +36,7 @@ public class UserService {
     public User create(@RequestBody UserDto user) {
         try {
             User newUser = UserMapper.dtoToUser(user);
-            return  userRepository.save(newUser);
+            return userRepository.save(newUser);
         } catch (ConstraintViolationException | NullPointerException s) {
             throw new ValidationException(String.format("Не верный email у пользователя %s", user.getId()));
         }
@@ -60,10 +60,10 @@ public class UserService {
      * Обновляет пользователя в бд.
      *
      * @param user объект пользователя.
-     * @param id идентификатор пользователя.
+     * @param id   идентификатор пользователя.
      * @return возвращает добавленного пользователя.
      */
-    public User update(User user,Long id) {
+    public User update(User user, Long id) {
         UserDto userDto = UserMapper.toUserDto(user, userRepository.getReferenceById(id));
         User userUpdate = UserMapper.dtoToUser(userDto);
         userUpdate.setId(id);

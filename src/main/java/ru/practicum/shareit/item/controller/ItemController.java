@@ -27,20 +27,20 @@ public class ItemController {
      * Добавляет вещь в бд.
      *
      * @param itemDto объект вещи.
-     * @param id идентификатор пользователя.
+     * @param id      идентификатор пользователя.
      * @return возвращает добавленную вещь.
      */
     @PostMapping
     public Item create(@Valid @RequestBody ItemDto itemDto,
-                        @RequestHeader("X-Sharer-User-Id") Long id) {
+                       @RequestHeader("X-Sharer-User-Id") Long id) {
         return itemService.create(itemDto, id);
     }
 
     /**
      * Обновляет вещь в бд.
      *
-     * @param item объект вещи.
-     * @param id идентификатор вещи.
+     * @param item   объект вещи.
+     * @param id     идентификатор вещи.
      * @param userId идентификатор пользователя.
      * @return возвращает измененную вещь.
      */
@@ -56,8 +56,8 @@ public class ItemController {
      * Добавляет комментарий к вещи, пользователем, который брал ее в аренду.
      *
      * @param commentDto сущность комментария.
-     * @param id идентификатор пользователя комментария.
-     * @param itemId идентификатор вещи.
+     * @param id         идентификатор пользователя комментария.
+     * @param itemId     идентификатор вещи.
      * @return возвращает добавленный комментарий.
      */
     @PostMapping("/{itemId}/comment")
@@ -82,7 +82,7 @@ public class ItemController {
     /**
      * Запрашивает вещь пользователя по идентификатору
      *
-     * @param id идентификатор вещи.
+     * @param id     идентификатор вещи.
      * @param userId идентификатор пользователя.
      * @return возвращает вещь пользователя.
      */

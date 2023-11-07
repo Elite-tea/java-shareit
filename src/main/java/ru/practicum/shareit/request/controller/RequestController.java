@@ -19,13 +19,13 @@ import java.util.List;
 @RequestMapping("/requests")
 @AllArgsConstructor
 public class RequestController {
- private final RequestService requestService;
+    private final RequestService requestService;
 
     /**
      * Добавляет запрос вещи в бд.
      *
      * @param itemRequestDto объект вещи.
-     * @param id идентификатор пользователя.
+     * @param id             идентификатор пользователя.
      * @return возвращает добавленную вещь.
      */
     @PostMapping
@@ -35,12 +35,12 @@ public class RequestController {
     }
 
     @GetMapping
-    public List<ItemGetRequestDTO> getListRequest(@Valid @RequestHeader("X-Sharer-User-Id") Long id)  {
+    public List<ItemGetRequestDTO> getListRequest(@Valid @RequestHeader("X-Sharer-User-Id") Long id) {
         return requestService.getListRequest(id);
     }
 
     @GetMapping("{requestId}")
-    public ItemGetRequestDTO getRequest(@Valid @PathVariable Long requestId, @RequestHeader("X-Sharer-User-Id") Long userId)  {
+    public ItemGetRequestDTO getRequest(@Valid @PathVariable Long requestId, @RequestHeader("X-Sharer-User-Id") Long userId) {
         return requestService.getRequest(requestId, userId);
     }
 

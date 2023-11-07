@@ -27,15 +27,15 @@ public class BookingController {
      */
     @PostMapping
     public Booking create(@Valid @RequestBody BookingDto booking, @RequestHeader("X-Sharer-User-Id") Long id) {
-        return bookingService.create(booking,id);
+        return bookingService.create(booking, id);
     }
 
     /**
      * Обновляет аренду в бд.
      *
      * @param bookingId идентификатор аренды
-     * @param userId идентификатор пользователя - инициатора
-     * @param approved статус аренды
+     * @param userId    идентификатор пользователя - инициатора
+     * @param approved  статус аренды
      * @return возвращает измененную аренду.
      */
     @PatchMapping("{bookingId}")
@@ -50,7 +50,7 @@ public class BookingController {
      * Аренды пользователя.
      *
      * @param state фильтр статуса аренд
-     * @param id идентификатор пользователя - инициатора
+     * @param id    идентификатор пользователя - инициатора
      * @return возвращает аренды пользователя.
      */
     @GetMapping
@@ -65,12 +65,12 @@ public class BookingController {
      * Обновляет аренду в бд.
      *
      * @param bookingId идентификатор аренды
-     * @param userId идентификатор пользователя - инициатора
+     * @param userId    идентификатор пользователя - инициатора
      * @return возвращает измененную аренду.
      */
     @GetMapping("{bookingId}")
     public Booking getBookingByUser(@Valid @PathVariable Long bookingId,
-                          @RequestHeader("X-Sharer-User-Id") Long userId) {
+                                    @RequestHeader("X-Sharer-User-Id") Long userId) {
 
         return bookingService.getBookingByUser(bookingId, userId);
     }
@@ -79,7 +79,7 @@ public class BookingController {
      * Аренды пользователя.
      *
      * @param state фильтр статуса аренд
-     * @param id идентификатор пользователя - инициатора
+     * @param id    идентификатор пользователя - инициатора
      * @return возвращает аренды пользователя.
      */
     @GetMapping("/owner") //Если есть вещь, нужно найти брони и выдать
@@ -89,4 +89,4 @@ public class BookingController {
                                                        @Positive @RequestParam(defaultValue = "10") Integer size) {
         return bookingService.getAllBookingItemByUser(id, state, from, size);
     }
-    }
+}

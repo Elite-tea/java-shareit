@@ -31,7 +31,6 @@ import java.util.NoSuchElementException;
 public class RequestService {
     /**
      * Описание данных методов можно найти в {@link ru.practicum.shareit.request.controller.RequestController }
-     *
      */
     private final RequestRepository requestRepository;
     private final UserService userService;
@@ -50,13 +49,13 @@ public class RequestService {
     public List<ItemGetRequestDTO> getListRequest(Long id) {
         User user = userService.getUser(id);
         Validation.checkValidUserGetRequest(user);
-            List<ItemGetRequestDTO> requestsResult = new ArrayList<>();
+        List<ItemGetRequestDTO> requestsResult = new ArrayList<>();
 
-            requestRepository.findByRequestor_IdOrderByCreatedDesc(id)
-                    .forEach(i -> requestsResult.add(ItemRequestMapper.transformationGetRequestDTO(
-                            i, itemService.getItemRepository().findByRequestId(i.getId()))));
+        requestRepository.findByRequestor_IdOrderByCreatedDesc(id)
+                .forEach(i -> requestsResult.add(ItemRequestMapper.transformationGetRequestDTO(
+                        i, itemService.getItemRepository().findByRequestId(i.getId()))));
 
-            return requestsResult;
+        return requestsResult;
     }
 
     public ItemGetRequestDTO getRequest(Long requestId, Long userId) {
@@ -78,14 +77,14 @@ public class RequestService {
                 Sort.by(Sort.Direction.DESC, "created"));
 
         List<ItemGetRequestDTO> requestsResult = new ArrayList<>();
-if (from >= 0 && size > 0) {
-    requestRepository.findAllByRequestorIdNot(userId, pageable)
-            .forEach(i -> requestsResult.add(ItemRequestMapper.transformationGetRequestDTO(
-                    i, itemService.getItemRepository().findByRequestId(i.getId()))));
-    return requestsResult;
-} else {
-    throw new ValidationException(String.format("Не верно указано количество предметов %d или страниц %d", from, size));
-}
+        if (from >= 0 && size > 0) {
+            requestRepository.findAllByRequestorIdNot(userId, pageable)
+                    .forEach(i -> requestsResult.add(ItemRequestMapper.transformationGetRequestDTO(
+                            i, itemService.getItemRepository().findByRequestId(i.getId()))));
+            return requestsResult;
+        } else {
+            throw new ValidationException(String.format("Не верно указано количество предметов %d или страниц %d", from, size));
+        }
 
     }
 }

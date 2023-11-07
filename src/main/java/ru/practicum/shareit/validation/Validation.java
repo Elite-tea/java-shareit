@@ -32,7 +32,8 @@ public class Validation {
                     && !Objects.equals(validUser.getId(), user.getId())) {
                 throw new RuntimeException(String.format("Пользователь с email %s уже зарегистрирован", user.getEmail()));
             }
-        } catch (NullPointerException ignore) { }
+        } catch (NullPointerException ignore) {
+        }
     }
 
     public static void validationItem(ItemDto itemDto) {
@@ -49,8 +50,8 @@ public class Validation {
     }
 
     public static void checkValidUserGetRequest(User user) {
-    if (user == null) {
-        throw new NotFoundException("Пользователь %d не найден, запрос невозможен");
-    }
+        if (user == null) {
+            throw new NotFoundException("Пользователь %d не найден, запрос невозможен");
+        }
     }
 }
