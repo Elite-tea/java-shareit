@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDataDto;
 import ru.practicum.shareit.item.entity.Comment;
-import ru.practicum.shareit.request.entity.ItemRequest;
 import ru.practicum.shareit.user.entity.User;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class ItemDataDto {
     protected BookingDataDto nextBooking;
     protected List<Comment> comments;
     protected User user;
-    protected ItemRequest request;
+    protected Long requestId;
 
     @Override
     public boolean equals(Object o) {

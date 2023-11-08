@@ -3,6 +3,7 @@ package ru.practicum.shareit.validation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import ru.practicum.shareit.exeption.NotFoundException;
 import ru.practicum.shareit.exeption.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.entity.User;
@@ -31,7 +32,8 @@ public class Validation {
                     && !Objects.equals(validUser.getId(), user.getId())) {
                 throw new RuntimeException(String.format("Пользователь с email %s уже зарегистрирован", user.getEmail()));
             }
-        } catch (NullPointerException ignore) { }
+        } catch (NullPointerException ignore) {
+        }
     }
 
     public static void validationItem(ItemDto itemDto) {
@@ -44,6 +46,12 @@ public class Validation {
         }
         if (itemDto.getAvailable() == null) {
             throw new ValidationException(String.format("У предмета %s нет статуса доступности", itemDto.getId()));
+        }
+    }
+
+    public static void checkValidUserGetRequest(User user) {
+        if (user == null) {
+            throw new NotFoundException("Пользователь %d не найден, запрос невозможен");
         }
     }
 }

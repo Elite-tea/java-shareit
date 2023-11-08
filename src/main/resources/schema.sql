@@ -26,3 +26,9 @@ CREATE TABLE IF NOT EXISTS comment (
     item_id BIGINT,
     author_name varchar(100),
     created TIMESTAMP WITHOUT TIME ZONE);
+
+CREATE TABLE IF NOT EXISTS request (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    description varchar(100),
+    requestor_id BIGINT,
+    created TIMESTAMP WITHOUT TIME ZONE);

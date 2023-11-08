@@ -3,6 +3,9 @@ package ru.practicum.shareit.item.service;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.entity.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
@@ -34,7 +37,6 @@ import java.util.stream.Collectors;
 public class ItemService {
     /**
      * Описание данных методов можно найти в {@link ru.practicum.shareit.item.controller.ItemController }
-     *
      */
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
@@ -64,85 +66,95 @@ public class ItemService {
     public Item update(ItemDto itemDto, Long id, Long userId) {
         Item initItem = itemRepository.findById(id).get();
         User user = userService.getUser(userId);
-        Item itemUpdate = ItemMapper.dtoItemUpdate(itemDto,initItem,user);
+        Item itemUpdate = ItemMapper.dtoItemUpdate(itemDto, initItem, user);
         itemUpdate.setId(id);
         return itemRepository.save(itemUpdate);
     }
 
-    public Collection<ItemDataDto> getItemByUser(Long id) {
-        try {
-            List<Comment> comment = commentRepository.findByItem_Id(id);
-            List<Item> item = itemRepository.findByUserId(id);
-            List<ItemDataDto> itemData = new ArrayList<>();
-            while (!item.isEmpty()) {
-                itemData.add(ItemMapper.itemToDataDtoNoBooking(item.get(0),commentRepository.findByItem_Id(id)));
-                item.remove(0);
-            }
-
-            LocalDateTime time = LocalDateTime.now();
-            List<Booking> booking = bookingRepository.findByItem_User_IdOrderByEndDesc(id).stream()
-                    .filter(p -> p.getEnd().isBefore(time)
-                            && p.getStart().isBefore(time)
-                            && p.getItem().getUser().getId().equals(id))
-                    .collect(Collectors.toList());
-
-            List<Booking> bookingNext = bookingRepository.findByItem_User_IdOrderByEndDesc(id).stream()
-                    .filter(p -> p.getEnd().isAfter(time)
-                            && p.getStart().isAfter(time)
-                            && p.getItem().getUser().getId().equals(id))
-                    .collect(Collectors.toList());
-
-            List<ItemDataDto> result = new ArrayList<>();
-            if (comment == null) {
-                comment = new ArrayList<>();
-            }
-
-            if (!booking.isEmpty() && !bookingNext.isEmpty()) {
-                while (!booking.isEmpty() && !bookingNext.isEmpty()) {
-                    result.add(ItemMapper.itemToDataDto(booking, bookingNext, comment));
-                    booking.remove(0);
-                    bookingNext.remove(bookingNext.size() - 1);
-                }
-                result.addAll(itemData);
-                return result.stream()
-                        .distinct()
-                        .collect(Collectors.toList());
-            } else {
-
-                log.debug("Запрошен предмет c id: {}", id);
-                return itemData;
-            }
-
-        } catch (RuntimeException e) {
-            log.debug("Предмет не существует");
-            throw new NotFoundException(String.format("Предмет с id %d не существует", id));
-        }
-    }
-
-    public ItemDataDto getItemById(Long id, Long userId) {
-        try {
-            List<Comment> comment = commentRepository.findByItem_Id(id);
-            LocalDateTime time = LocalDateTime.now();
-            List<Booking> booking = bookingRepository.findByItem_IdOrderByEndDesc(id).stream()
-                    .filter(p -> p.getStart().isBefore(time) && p.getItem().getUser().getId().equals(userId))
-                    .collect(Collectors.toList());
-
-            List<Booking> bookingNext = bookingRepository.findByItem_IdOrderByEndDesc(id).stream()
-                    .filter(p -> p.getEnd().isAfter(time)
-                            && p.getStart().isAfter(time)
-                            && p.getItem().getUser().getId().equals(userId))
-                    .collect(Collectors.toList());
-
-            return ItemMapper.itemToDataDto(booking, bookingNext, comment);
-        } catch (RuntimeException e) {
+    public Collection<ItemDataDto> getItemByUser(Long id, Integer from, Integer size) {
+        Pageable pageable = PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "created"));
+        if (from >= 0 && size > 0) {
             try {
-                Item item = itemRepository.findById(id).get();
-                log.debug("Запрошен предмет c id: {}", id);
-                return ItemMapper.itemToDataDtoNoBooking(item,commentRepository.findByItem_Id(id));
-            } catch (RuntimeException g) {
+                List<Comment> comment = commentRepository.findByItem_Id(id, pageable);
+                List<Item> item = itemRepository.findByUserId(id);
+                List<ItemDataDto> itemData = new ArrayList<>();
+                while (!item.isEmpty()) {
+                    itemData.add(ItemMapper.itemToDataDtoNoBooking(item.get(0), commentRepository.findByItem_Id(id, pageable)));
+                    item.remove(0);
+                }
+
+                LocalDateTime time = LocalDateTime.now();
+                List<Booking> booking = bookingRepository.findByItem_User_IdOrderByEndDesc(id).stream()
+                        .filter(p -> p.getEnd().isBefore(time)
+                                && p.getStart().isBefore(time)
+                                && p.getItem().getUser().getId().equals(id))
+                        .collect(Collectors.toList());
+
+                List<Booking> bookingNext = bookingRepository.findByItem_User_IdOrderByEndDesc(id).stream()
+                        .filter(p -> p.getEnd().isAfter(time)
+                                && p.getStart().isAfter(time)
+                                && p.getItem().getUser().getId().equals(id))
+                        .collect(Collectors.toList());
+
+                List<ItemDataDto> result = new ArrayList<>();
+                if (comment == null) {
+                    comment = new ArrayList<>();
+                }
+
+                if (!booking.isEmpty() && !bookingNext.isEmpty()) {
+                    while (!booking.isEmpty() && !bookingNext.isEmpty()) {
+                        result.add(ItemMapper.itemToDataDto(booking, bookingNext, comment));
+                        booking.remove(0);
+                        bookingNext.remove(bookingNext.size() - 1);
+                    }
+                    result.addAll(itemData);
+                    return result.stream()
+                            .distinct()
+                            .collect(Collectors.toList());
+                } else {
+
+                    log.debug("Запрошен предмет c id: {}", id);
+                    return itemData;
+                }
+
+            } catch (RuntimeException e) {
                 log.debug("Предмет не существует");
                 throw new NotFoundException(String.format("Предмет с id %d не существует", id));
             }
+        } else {
+            throw new ValidationException(String.format("Не верно указано количество предметов %d или страниц %d", from, size));
+        }
+    }
+
+    public ItemDataDto getItemById(Long id, Long userId, Integer from, Integer size) {
+        Pageable pageable = PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "created"));
+        if (from >= 0 && size > 0) {
+            try {
+                List<Comment> comment = commentRepository.findByItem_Id(id, pageable);
+                LocalDateTime time = LocalDateTime.now();
+                List<Booking> booking = bookingRepository.findByItem_IdOrderByEndDesc(id).stream()
+                        .filter(p -> p.getStart().isBefore(time) && p.getItem().getUser().getId().equals(userId))
+                        .collect(Collectors.toList());
+
+                List<Booking> bookingNext = bookingRepository.findByItem_IdOrderByEndDesc(id).stream()
+                        .filter(p -> p.getEnd().isAfter(time)
+                                && p.getStart().isAfter(time)
+                                && p.getItem().getUser().getId().equals(userId))
+                        .collect(Collectors.toList());
+
+                return ItemMapper.itemToDataDto(booking, bookingNext, comment);
+            } catch (RuntimeException e) {
+                try {
+                    Item item = itemRepository.findById(id).get();
+                    log.debug("Запрошен предмет c id: {}", id);
+                    return ItemMapper.itemToDataDtoNoBooking(item, commentRepository.findByItem_Id(id, pageable));
+                } catch (RuntimeException g) {
+                    log.debug("Предмет не существует");
+                    throw new NotFoundException(String.format("Предмет с id %d не существует", id));
+                }
+            }
+        } else {
+            throw new ValidationException(String.format("Не верно указано количество предметов %d или страниц %d", from, size));
         }
     }
 

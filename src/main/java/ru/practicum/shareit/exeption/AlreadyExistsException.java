@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 public class AlreadyExistsException extends RuntimeException {
 
+    public AlreadyExistsException(final String message) {
+        super(message);
+        log.error(message);
+    }
+
     @ExceptionHandler(AlreadyExistsException.class)
     protected ResponseEntity<AlreadyExistsException> handleThereIsNoSuchUserException() {
         return new ResponseEntity<>(new AlreadyExistsException("Unknown state: UNSUPPORTED_STATUS"),
                 HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    public AlreadyExistsException(final String message) {
-        super(message);
-        log.error(message);
     }
 }
